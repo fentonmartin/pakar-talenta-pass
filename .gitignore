@@ -11,3 +11,4 @@ dist/
 .env.*.local
 .vercel/
 .git/
+**/*.tsbuildinfo
