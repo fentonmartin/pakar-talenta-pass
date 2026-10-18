@@ -1,0 +1,39 @@
+{
+  "name": "pakar-talenta-pass",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Pakar Talenta Pass — exclusive digital access pass for vetted professionals",
+  "type": "module",
+  "engines": {
+    "node": ">=22.0.0",
+    "npm": ">=10.0.0"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace=@pakar-talenta/web",
+    "worker": "npm run start --workspace=@pakar-talenta/worker",
+    "build": "npm run build --workspaces --if-present",
+    "verify": "npm run typecheck && npm run lint",
+    "typecheck": "tsc --build",
+    "typecheck:web": "tsc --project apps/web/tsconfig.json --noEmit",
+    "lint": "eslint . --max-warnings=0",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "vitest run",
+    "db:generate": "npm run db:generate --workspace=@pakar-talenta/db",
+    "db:migrate": "npm run db:migrate --workspace=@pakar-talenta/db",
+    "db:studio": "npm run db:studio --workspace=@pakar-talenta/db",
+    "commitmsg": "node scripts/check-commit-msg.mjs"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "eslint": "^9.17.0",
+    "prettier": "^3.4.2",
+    "typescript": "^5.7.2",
+    "typescript-eslint": "^8.18.1",
+    "vitest": "^2.1.8"
+  }
+}

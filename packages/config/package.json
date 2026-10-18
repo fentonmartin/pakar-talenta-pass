@@ -1,0 +1,13 @@
+{
+  "name": "@pakar-talenta/config",
+  "version": "0.1.0",
+  "description": "Environment config resolution + security-floor clamp",
+  "main": "index.ts",
+  "types": "index.ts",
+  "scripts": {
+    "resolve": "tsx scripts/resolve-config.ts"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.2"
+  }
+}

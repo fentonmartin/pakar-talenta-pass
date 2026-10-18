@@ -1,0 +1,15 @@
+{
+  "name": "@pakar-talenta/worker",
+  "version": "0.1.0",
+  "description": "Background job runner — delivery queue for email/WhatsApp",
+  "main": "index.ts",
+  "types": "index.ts",
+  "scripts": {
+    "start": "tsx src/index.ts"
+  },
+  "devDependencies": {
+    "bull": "^4.12.6",
+    "bullmq": "^5.17.0",
+    "typescript": "^5.7.2"
+  }
+}

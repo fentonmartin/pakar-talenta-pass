@@ -1,0 +1,15 @@
+{
+  "name": "@pakar-talenta/auth",
+  "version": "0.1.0",
+  "description": "Session management + admin sign-in for Pakar Talenta Pass",
+  "main": "index.ts",
+  "types": "index.ts",
+  "scripts": {
+    "start": "tsx src/index.ts"
+  },
+  "devDependencies": {
+    "next": "^15.0.0",
+    "next-auth": "^5.0.0-beta.20",
+    "typescript": "^5.7.2"
+  }
+}

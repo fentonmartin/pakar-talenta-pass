@@ -1,0 +1,14 @@
+{
+  "name": "@pakar-talenta/core",
+  "version": "0.1.0",
+  "description": "Business logic — delivery engine, verification, access codes",
+  "main": "index.ts",
+  "types": "index.ts",
+  "scripts": {
+    "generate-code": "tsx scripts/generate-code.ts",
+    "verify-access": "tsx scripts/verify-access.ts"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.2"
+  }
+}
