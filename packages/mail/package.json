@@ -2,13 +2,19 @@
   "name": "@pakar-talenta/mail",
   "version": "0.1.0",
   "description": "SMTP transport + email templates for Pakar Talenta Pass deliveries",
-  "main": "index.ts",
-  "types": "index.ts",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "type": "module",
   "scripts": {
-    "send": "tsx scripts/send-email.ts"
+    "dev": "tsx watch src/index.ts"
+  },
+  "dependencies": {
+    "nodemailer": "^6.9.14",
+    "@pakar-talenta/core": "^0.1.0",
+    "@pakar-talenta/db": "^0.1.0"
   },
   "devDependencies": {
-    "nodemailer": "^6.9.14",
+    "@types/node": "^22.10.2",
     "typescript": "^5.7.2"
   }
 }

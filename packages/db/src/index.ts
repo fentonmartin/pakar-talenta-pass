@@ -1,5 +1,5 @@
 import { relations } from 'drizzle-orm';
-import { pgEnum, pgTable, text, timestamp, uuid, varchar } from 'drizzle-orm/pg-core';
+import { pgEnum, pgTable, text, timestamp, uuid, varchar, jsonb } from 'drizzle-orm/pg-core';
 
 /**
  * Enums
@@ -23,6 +23,31 @@ export const accessMethodEnum = pgEnum('access_method', [
 
 /** Kind of reusable link generated for a passport. */
 export const reusableLinkTypeEnum = pgEnum('reusable_link_type', ['wa', 'mailto']);
+
+/** Lifecycle states that an audit event can represent. */
+export const auditEventTypeEnum = pgEnum('audit_event_type', [
+  'passport_created',
+  'passport_updated',
+  'passport_revoked',
+  'delivery_queued',
+  'delivery_sent',
+  'delivery_failed',
+  'verification_attempt',
+  'verification_success',
+  'verification_failure',
+  'magic_link_sent',
+  'admin_login',
+  'admin_login_failed',
+  'access_granted',
+]);
+
+/** Entity types that audit events target. */
+export const auditResourceTypeEnum = pgEnum('audit_resource_type', [
+  'passport',
+  'delivery',
+  'session',
+  'admin',
+]);
 
 /**
  * Tables
@@ -74,6 +99,23 @@ export const reusableLinks = pgTable('reusable_links', {
   url: text('url').notNull(),
   createdBy: varchar('created_by').notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
+});
+
+/**
+ * Append-only audit log — immutable record of every security-relevant event.
+ * No UPDATE or DELETE is ever issued against this table.
+ */
+export const auditLog = pgTable('audit_log', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  eventType: auditEventTypeEnum('event_type').notNull(),
+  resourceType: auditResourceTypeEnum('resource_type').notNull(),
+  resourceId: uuid('resource_id'),
+  actor: varchar('actor', { length: 256 }).notNull(),
+  ipAddress: varchar('ip_address', { length: 64 }),
+  userAgent: text('user_agent'),
+  session: text('session'),
+  metadata: jsonb('metadata'),
+  timestamp: timestamp('timestamp').defaultNow().notNull(),
 });
 
 /**
@@ -137,6 +179,7 @@ export const schema = {
   deliveryLog,
   accessLogs,
   reusableLinks,
+  auditLog,
   passportPassesRelations,
   deliveryLogRelations,
   accessLogsRelations,
@@ -146,4 +189,6 @@ export const schema = {
   deliveryStatusEnum,
   accessMethodEnum,
   reusableLinkTypeEnum,
+  auditEventTypeEnum,
+  auditResourceTypeEnum,
 } as const;

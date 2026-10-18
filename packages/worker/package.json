@@ -2,14 +2,21 @@
   "name": "@pakar-talenta/worker",
   "version": "0.1.0",
   "description": "Background job runner — delivery queue for email/WhatsApp",
-  "main": "index.ts",
-  "types": "index.ts",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "type": "module",
   "scripts": {
     "start": "tsx src/index.ts"
   },
-  "devDependencies": {
-    "bull": "^4.12.6",
+  "dependencies": {
+    "@pakar-talenta/core": "^0.1.0",
+    "@pakar-talenta/db": "^0.1.0",
+    "@pakar-talenta/mail": "^0.1.0",
     "bullmq": "^5.17.0",
+    "ioredis": "^5.4.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
     "typescript": "^5.7.2"
   }
 }

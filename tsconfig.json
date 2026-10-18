@@ -10,9 +10,8 @@
     "outDir": "./dist",
     "rootDir": ".",
     "resolveJsonModule": true,
-    "declaration": true,
-    "skipLibCheck": true
+    "declaration": true
   },
-  "include": ["apps/*", "packages/*"],
+  "include": ["packages/**/*.ts"],
   "exclude": ["node_modules", "dist", ".git"]
 }

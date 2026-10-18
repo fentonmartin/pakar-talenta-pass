@@ -1,0 +1,13 @@
+node_modules/
+dist/
+.next/
+.nuxt/
+.vscode/
+.idea/
+.DS_Store
+*.log
+.env
+.env.local
+.env.*.local
+.vercel/
+.git/

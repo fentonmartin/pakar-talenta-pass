@@ -1,0 +1,32 @@
+{
+  "name": "@pakar-talenta/web",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Pakar Talenta Pass — admin console + public verification portal",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@pakar-talenta/core": "^0.1.0",
+    "@pakar-talenta/db": "^0.1.0",
+    "@pakar-talenta/auth": "^0.1.0",
+    "@pakar-talenta/mail": "^0.1.0",
+    "@pakar-talenta/audit": "^0.1.0",
+    "@pakar-talenta/config": "^0.1.0",
+    "next": "15.0.0",
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "typescript": "^5.7.2",
+    "tailwindcss": "^3.4.0",
+    "autoprefixer": "^10.4.0",
+    "postcss": "^8.4.0"
+  }
+}
