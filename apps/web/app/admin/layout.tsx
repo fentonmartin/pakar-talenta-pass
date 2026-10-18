@@ -3,6 +3,8 @@ import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { verifySession } from '@pakar-talenta/auth';
 
+export const dynamic = 'force-dynamic';
+
 /**
  * Admin layout — protects all /admin routes.
  * Checks for a valid JWT session cookie, redirects to login if missing/expired.

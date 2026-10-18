@@ -2,6 +2,8 @@ import Link from 'next/link';
 import { DashboardStats } from '@/app/components/DashboardStats';
 import type { PassportSummary } from '@/app/components/PassportStats';
 
+export const dynamic = 'force-dynamic';
+
 async function fetchStats(): Promise<PassportSummary> {
   try {
     const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/stats`, {

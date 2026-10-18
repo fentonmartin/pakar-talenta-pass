@@ -16,6 +16,7 @@ export interface ShimmerEffectProps {
 /**
  * Wraps children with a shimmer sweep animation — the signature VIP
  * "light sweep" effect across embossed surfaces.
+ * Uses CSS keyframes from globals.css (no styled-jsx needed).
  */
 export function ShimmerSweep({
   direction = 'left-to-right',
@@ -33,29 +34,12 @@ export function ShimmerSweep({
     <div
       className={`relative overflow-hidden ${className}`}
       style={{
-        '--shimmer-gradient': gradient,
-        animation: `shimmer-${duration}s-infinite`,
-      } as React.CSSProperties}
+        background: gradient,
+        opacity: intensity,
+        animation: `shimmer ${duration}s infinite`,
+      }}
     >
       {children}
-      <style jsx>{`
-        @keyframes shimmer-${duration}s {
-          0% {
-            background-position: -200% 0;
-          }
-          100% {
-            background-position: 200% 0;
-          }
-        }
-      `}</style>
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background: gradient,
-          animation: `shimmer-${duration}s ${duration}s infinite`,
-          opacity: intensity,
-        }}
-      />
     </div>
   );
 }

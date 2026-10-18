@@ -4,6 +4,8 @@ import { passportPasses } from '@pakar-talenta/db';
 import { eq } from 'drizzle-orm';
 import { PassportStats } from '@/app/components/PassportStats';
 
+export const dynamic = 'force-dynamic';
+
 interface PassportRow {
   id: string;
   fullName: string;

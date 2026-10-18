@@ -3,7 +3,7 @@
  * Provides JWT-based sessions, bcrypt password hashing, and TOTP 2FA.
  */
 import { compare, hash } from 'bcryptjs';
-import { createHmac } from 'node:crypto';
+import { createHmac } from 'crypto';
 
 /** Role assigned to every admin session. */
 export const ADMIN_ROLE = 'admin' as const;

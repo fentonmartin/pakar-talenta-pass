@@ -3,6 +3,8 @@ import { getDb } from '@/app/lib/db';
 import { passportPasses } from '@pakar-talenta/db';
 import { and, desc, eq, ilike, type SQL } from 'drizzle-orm';
 
+export const dynamic = 'force-dynamic';
+
 interface PassportRow {
   id: string;
   fullName: string;

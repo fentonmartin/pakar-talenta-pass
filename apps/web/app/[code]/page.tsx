@@ -2,6 +2,8 @@ import { notFound } from 'next/navigation';
 import { QRCodeSvg } from '@/app/components/QRCodeSvg';
 import { PassCard } from '@/app/components/PassCard';
 
+export const dynamic = 'force-dynamic';
+
 interface PassportData {
   id: string;
   fullName: string;
