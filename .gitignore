@@ -13,3 +13,4 @@ dist/
 .git/
 **/*.tsbuildinfo
 .demo-data.json
+**/data/

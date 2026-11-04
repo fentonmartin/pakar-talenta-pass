@@ -32,6 +32,12 @@ export default async function PassesPage({ searchParams }: PassesPageProps) {
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold text-[#002060]">Passes</h1>
         <div className="flex items-center gap-2">
+          <a
+            href="/api/passes/export"
+            className="rounded-xl border border-slate-300 px-4 py-2 text-sm font-medium text-slate-600 transition hover:border-[#7a2fff] hover:text-[#7a2fff]"
+          >
+            Export CSV
+          </a>
           <Link
             href="/admin/passes/import"
             className="rounded-xl border border-slate-300 px-4 py-2 text-sm font-medium text-slate-600 transition hover:border-[#7a2fff] hover:text-[#7a2fff]"

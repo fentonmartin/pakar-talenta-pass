@@ -49,6 +49,12 @@ export default async function ProtectedAdminLayout({
             >
               Stats
             </Link>
+            <Link
+              href="/admin/settings"
+              className="text-sm font-medium text-slate-600 transition-colors hover:text-[#7a2fff]"
+            >
+              Settings
+            </Link>
             <form action="/api/auth/logout" method="POST">
               <button
                 type="submit"
