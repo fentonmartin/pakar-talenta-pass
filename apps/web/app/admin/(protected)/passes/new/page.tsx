@@ -53,26 +53,26 @@ export default function CreatePassPage() {
   return (
     <div className="max-w-2xl">
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-white">Create New Pass</h1>
-        <p className="text-surface-400 mt-1">Issue a new access pass to a vetted professional.</p>
+        <h1 className="text-2xl font-bold text-[#002060]">Create New Pass</h1>
+        <p className="text-slate-500 mt-1">Issue a new access pass to a vetted professional.</p>
       </div>
 
       {result && (
         <div
           className={`mb-6 p-4 rounded-xl border ${
             result.success
-              ? 'bg-green-500/10 border-green-500/30 text-green-400'
-              : 'bg-red-500/10 border-red-500/30 text-red-400'
+              ? 'bg-green-50 border-green-500/30 text-green-700'
+              : 'bg-red-50 border-red-500/30 text-red-700'
           }`}
         >
           {result.message}
-          {result.code && <div className="mt-2 font-mono text-gold">{result.code}</div>}
+          {result.code && <div className="mt-2 font-mono text-[#7a2fff]">{result.code}</div>}
         </div>
       )}
 
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
-          <label className="block text-sm font-medium text-surface-300 mb-2">
+          <label className="mb-2 block text-sm font-medium text-slate-700">
             Full Name *
           </label>
           <input
@@ -80,48 +80,48 @@ export default function CreatePassPage() {
             name="fullName"
             required
             placeholder="John Doe"
-            className="w-full px-4 py-3 bg-surface-100/10 border border-gold/20 rounded-xl text-white placeholder-surface-500 focus:outline-none focus:border-gold/50 transition-colors"
+            className="w-full px-4 py-3 bg-white border border-slate-300 rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:border-[#7a2fff] focus:ring-2 focus:ring-[#7a2fff]/20 transition-colors"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-surface-300 mb-2">
+          <label className="mb-2 block text-sm font-medium text-slate-700">
             Email Address
           </label>
           <input
             type="email"
             name="email"
             placeholder="john@example.com"
-            className="w-full px-4 py-3 bg-surface-100/10 border border-gold/20 rounded-xl text-white placeholder-surface-500 focus:outline-none focus:border-gold/50 transition-colors"
+            className="w-full px-4 py-3 bg-white border border-slate-300 rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:border-[#7a2fff] focus:ring-2 focus:ring-[#7a2fff]/20 transition-colors"
           />
-          <p className="text-xs text-surface-500 mt-1">
+          <p className="mt-1 text-xs text-slate-400">
             Used for SMTP delivery. At least one contact method (email or WhatsApp) is required.
           </p>
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-surface-300 mb-2">
+          <label className="mb-2 block text-sm font-medium text-slate-700">
             WhatsApp Number
           </label>
           <input
             type="tel"
             name="phone"
             placeholder="+62 812-3456-7890"
-            className="w-full px-4 py-3 bg-surface-100/10 border border-gold/20 rounded-xl text-white placeholder-surface-500 focus:outline-none focus:border-gold/50 transition-colors"
+            className="w-full px-4 py-3 bg-white border border-slate-300 rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:border-[#7a2fff] focus:ring-2 focus:ring-[#7a2fff]/20 transition-colors"
           />
-          <p className="text-xs text-surface-500 mt-1">
+          <p className="mt-1 text-xs text-slate-400">
             Indonesian number in +62 format. Will generate a wa.me link for delivery.
           </p>
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-surface-300 mb-2">
+          <label className="mb-2 block text-sm font-medium text-slate-700">
             Expiry (days)
           </label>
           <select
             name="expiryDays"
             defaultValue="365"
-            className="w-full px-4 py-3 bg-surface-100/10 border border-gold/20 rounded-xl text-white focus:outline-none focus:border-gold/50 transition-colors"
+            className="w-full px-4 py-3 bg-white border border-slate-300 rounded-xl text-slate-900 focus:outline-none focus:border-[#7a2fff]"
           >
             <option value="30">30 days</option>
             <option value="90">90 days</option>
@@ -134,7 +134,7 @@ export default function CreatePassPage() {
         <button
           type="submit"
           disabled={submitting}
-          className="w-full gold-bg text-surface-50 py-3 rounded-xl font-bold hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+          className="gold-bg w-full text-white py-3 rounded-xl font-bold hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {submitting ? 'Creating...' : 'Create Pass'}
         </button>

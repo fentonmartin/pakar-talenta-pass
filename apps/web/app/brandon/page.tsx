@@ -2,12 +2,13 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import type { BrandonReport } from '../lib/brandon/types';
 
 export default function BrandonPage() {
   const [chatText, setChatText] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [report, setReport] = useState(null);
+  const [report, setReport] = useState<BrandonReport | null>(null);
   const router = useRouter();
 
   const analyze = async () => {
@@ -39,23 +40,23 @@ export default function BrandonPage() {
   };
 
   return (
-    <div className="min-h-screen bg-surface-50 py-12 px-6">
+    <div className="min-h-screen bg-white py-12 px-6">
       <div className="max-w-2xl mx-auto text-center">
-        <h1 className="text-3xl font-bold text-white mb-4">
+        <h1 className="text-3xl font-bold text-[#002060] mb-4">
           What Brandon Thinks
         </h1>
-        <p className="text-surface-400 mb-8">
+        <p className="text-slate-500 mb-8">
           Paste a WhatsApp or iMessage chat export to get an AI-powered analysis
           of relationship dynamics.
         </p>
 
         {error && (
-          <p className="text-red-400 mb-4">{error}</p>
+          <p className="text-red-600 mb-4">{error}</p>
         )}
 
         {loading && (
-          <div className="mb-4">
-            <div className="animate-spin rounded-full h-6 w-6 mx-auto border-b-2 border-gold"></div>
+          <div className="mb-4 text-slate-500">
+            <div className="animate-spin rounded-full h-6 w-6 mx-auto border-b-2 border-[#7a2fff]"></div>
             <span>Analyzing...</span>
           </div>
         )}
@@ -64,28 +65,28 @@ export default function BrandonPage() {
           <textarea
             onChange={(e) => setChatText(e.target.value)}
             value={chatText}
-            className="w-full bg-surface-900 text-white p-4 rounded-xl resize-none min-h-[200px]"
+            className="w-full bg-white border border-slate-300 text-slate-900 p-4 rounded-xl resize-none min-h-[200px] focus:outline-none focus:border-[#7a2fff] focus:ring-2 focus:ring-[#7a2fff]/20"
             placeholder="Paste your chat export here (WhatsApp: Export chat > Without media, or iMessage TXT)..."
             rows={8}
           />
         )}
 
         {report && (
-          <div className="mt-6 glass rounded-[20px] p-6 border border-gold/30">
-            <h2 className="text-xl font-bold text-white mb-2">Next Question</h2>
-            <p className="text-gold font-medium break-all">{report.nextQuestion.question}</p>
+          <div className="mt-6 glass rounded-[20px] p-6 border border-slate-200/70">
+            <h2 className="text-xl font-bold text-slate-900 mb-2">Next Question</h2>
+            <p className="text-[#7a2fff] font-medium break-all">{report.nextQuestion.question}</p>
             <button
               onClick={() => router.push('/')}
-              className="mt-4 gold-bg text-surface-50 py-2 rounded-xl font-bold"
+              className="mt-4 gold-bg py-2 px-4 text-white rounded-xl font-bold"
             >
               New Analysis
             </button>
-          </button>
+          </div>
         )}
 
         <button
           onClick={analyze}
-          className="w-full gold-bg text-surface-50 py-3 rounded-xl font-bold hover:opacity-90 transition-opacity mt-6"
+          className="w-full gold-bg py-3 text-white rounded-xl font-bold hover:opacity-90 transition-opacity mt-6"
           disabled={loading}
         >
           {loading ? 'Analyzing...' : 'Analyze Chat'}

@@ -1,4 +1,4 @@
-n# Pakar Talenta Pass
+# Pakar Talenta Pass
 
 Exclusive digital access pass for vetted professionals.
 
@@ -27,6 +27,41 @@ npm run worker
 ```
 
 Open http://localhost:3000 to view the portal, or http://localhost:3000/admin/login for the admin console.
+
+## Production mode (real database) — default
+
+The app runs in **production mode by default** (`DEMO_MODE=false`): all data is
+read/written to the PostgreSQL database at `POSTGRES_URL`. Seed it once with
+the starter dataset:
+
+```bash
+npm install
+npm run db:migrate          # push the Drizzle schema
+node scripts/seed-prod.mjs  # seed 18 sample passes (+ some audit events)
+npm run dev
+```
+
+## Demo Mode (no database)
+
+To explore the full UI with **zero setup** (no database), enable demo mode by
+setting `DEMO_MODE=true` in `.env`, then:
+
+```bash
+npm install
+npm run dev
+```
+
+In demo mode the app serves a realistic seeded dataset in-memory (stored in
+`.demo-data.json`, git-ignored) with 18 vetted-professional profiles across
+statuses (active, expired, revoked) with realistic Indonesian names, emails and
++62 WhatsApp numbers.
+
+**Demo admin login** for `http://localhost:3000/admin/login`:
+- Password: `admin123`
+- TOTP 2FA secret: `JBSWY3DPEHPK3PXP` (add it to any authenticator app, e.g. Google Authenticator)
+
+In demo mode, passes you create/revoke/update are written to `.demo-data.json`
+and survive reloads (delete that file to re-seed).
 
 ## Environment Variables
 

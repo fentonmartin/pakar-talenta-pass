@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getBrandonReport } from '@/lib/brandon/analyzer';
+import { getBrandonReport } from '../../lib/brandon/analyzer';
 
 export async function POST(request: Request) {
   try {

@@ -1,6 +1,5 @@
-import { getDb } from '@/app/lib/db';
-import { verifyPassport, isPassportValid } from '@pakar-talenta/core';
 import { type NextRequest, NextResponse } from 'next/server';
+import { verifyPassport, isPassportValid } from '@/app/lib/demo-store';
 
 /**
  * POST /api/verify — Verify a passport by email/phone + unique code.
@@ -14,19 +13,16 @@ export async function POST(request: NextRequest) {
     if (!identifier || !code) {
       return NextResponse.json(
         { error: 'identifier and code are required' },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
-    const db = getDb();
-    
-    // Direct verification using core function
-    const passport = await verifyPassport(identifier, code, { db });
+    const passport = await verifyPassport(identifier, code);
 
     if (!passport) {
       return NextResponse.json(
         { error: 'Invalid code or identifier' },
-        { status: 404 }
+        { status: 404 },
       );
     }
 

@@ -1,28 +1,23 @@
-import { getDb } from '@/app/lib/db';
-import { passportPasses } from '@pakar-talenta/db';
-import { eq } from 'drizzle-orm';
 import { type NextRequest, NextResponse } from 'next/server';
+import {
+  getPassport,
+  updatePassportStatus,
+  updatePassportExpiryDate,
+} from '@/app/lib/demo-store';
 
 /**
  * GET /api/passes/[id] — Get a single passport pass.
  */
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
     const { id } = await params;
-    const db = getDb();
-    const [passport] = await db
-      .select()
-      .from(passportPasses)
-      .where(eq(passportPasses.id, id))
-      .limit(1);
-
+    const passport = await getPassport(id);
     if (!passport) {
       return NextResponse.json({ error: 'Passport not found' }, { status: 404 });
     }
-
     return NextResponse.json({ passport });
   } catch (err) {
     console.error('Failed to fetch passport:', err);
@@ -36,30 +31,24 @@ export async function GET(
  */
 export async function PUT(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
     const { id } = await params;
     const body = await request.json();
     const { status, expiryDate } = body;
 
-    const updates: Record<string, unknown> = {};
-    if (status) updates.status = status;
-    if (expiryDate) updates.expiryDate = new Date(expiryDate);
-
-    if (Object.keys(updates).length === 0) {
-      return NextResponse.json({ error: 'No fields to update' }, { status: 400 });
+    const existing = await getPassport(id);
+    if (!existing) {
+      return NextResponse.json({ error: 'Passport not found' }, { status: 404 });
     }
 
-    const db = getDb();
-    const [updated] = await db
-      .update(passportPasses)
-      .set(updates)
-      .where(eq(passportPasses.id, id))
-      .returning();
-
-    if (!updated) {
-      return NextResponse.json({ error: 'Passport not found' }, { status: 404 });
+    let updated = existing;
+    if (status && ['active', 'expired', 'revoked'].includes(status)) {
+      updated = (await updatePassportStatus(id, status))!;
+    }
+    if (expiryDate) {
+      updated = (await updatePassportExpiryDate(id, new Date(expiryDate)))!;
     }
 
     return NextResponse.json({ passport: updated });
@@ -74,21 +63,14 @@ export async function PUT(
  */
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
     const { id } = await params;
-    const db = getDb();
-    const [revoked] = await db
-      .update(passportPasses)
-      .set({ status: 'revoked' })
-      .where(eq(passportPasses.id, id))
-      .returning();
-
+    const revoked = await updatePassportStatus(id, 'revoked');
     if (!revoked) {
       return NextResponse.json({ error: 'Passport not found' }, { status: 404 });
     }
-
     return NextResponse.json({ passport: revoked });
   } catch (err) {
     console.error('Failed to revoke passport:', err);

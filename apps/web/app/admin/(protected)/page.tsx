@@ -25,8 +25,8 @@ export default async function AdminDashboard() {
   return (
     <div>
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-white">Pakar Talenta Pass Dashboard</h1>
-        <p className="text-surface-400 mt-1">Overview of all issued access passes</p>
+        <h1 className="text-3xl font-bold text-[#002060]">Pakar Talenta Pass Dashboard</h1>
+        <p className="mt-1 text-slate-500">Overview of all issued access passes</p>
       </div>
 
       <DashboardStats stats={stats} />
@@ -34,22 +34,22 @@ export default async function AdminDashboard() {
       <div className="mt-8 grid md:grid-cols-2 gap-6">
         <Link
           href="/admin/passes/new"
-          className="glass border border-gold/30 rounded-[16px] p-6 hover:border-gold/50 transition-colors group"
+          className="glass rounded-[16px] border border-slate-200/70 p-6 transition-colors hover:border-[#7a2fff]/50 group"
         >
-          <h3 className="text-xl font-bold text-white mb-2 group-hover:text-gold transition-colors">
+          <h3 className="text-xl font-bold text-slate-900 mb-2 transition-colors group-hover:text-[#7a2fff]">
             Create New Pass
           </h3>
-          <p className="text-surface-400">Issue a new access pass to a vetted professional.</p>
+          <p className="text-slate-500">Issue a new access pass to a vetted professional.</p>
         </Link>
 
         <Link
           href="/admin/passes"
-          className="glass border border-gold/30 rounded-[16px] p-6 hover:border-gold/50 transition-colors group"
+          className="glass rounded-[16px] border border-slate-200/70 p-6 transition-colors hover:border-[#7a2fff]/50 group"
         >
-          <h3 className="text-xl font-bold text-white mb-2 group-hover:text-gold transition-colors">
+          <h3 className="text-xl font-bold text-slate-900 mb-2 transition-colors group-hover:text-[#7a2fff]">
             Manage Passes
           </h3>
-          <p className="text-surface-400">View, search, and update all existing passes.</p>
+          <p className="text-slate-500">View, search, and update all existing passes.</p>
         </Link>
       </div>
     </div>

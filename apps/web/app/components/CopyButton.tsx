@@ -57,7 +57,7 @@ export default function CopyButton({
       />
       <button
         onClick={handleCopy}
-        className="gold-bg text-surface-50 py-2 rounded-xl font-sm hover:opacity-90 transition-opacity"
+        className="gold-bg text-white py-2 rounded-xl font-sm hover:opacity-90 transition-opacity"
         disabled={copied}
       >
         {copied ? 'Copied!' : 'Copy'}

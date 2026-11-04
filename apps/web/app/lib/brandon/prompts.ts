@@ -24,8 +24,7 @@ Return a JSON object with:
 }
 
 Chat export:
-${messages}
-}`
+${messages}`
 }
 
 /** Prompt template for effort and consistency analysis */

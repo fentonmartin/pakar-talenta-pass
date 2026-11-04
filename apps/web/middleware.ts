@@ -1,45 +1,18 @@
 import { NextResponse, type NextRequest } from 'next/server';
-import { verifySession } from '@pakar-talenta/auth';
 
 /**
- * Next.js middleware — protects admin routes.
- * 
- * Public routes: /, /verify, /[code]
- * Protected routes: /admin/* (except /admin/login)
+ * Middleware — kept as a light pass-through.
+ *
+ * Admin route protection is handled by the authenticated layout under
+ * `app/admin/(protected)/`, which runs on the Node.js runtime where the
+ * `@pakar-talenta/auth` JWT helpers can execute. Middleware runs on the Edge
+ * runtime, which cannot run the Node-only `jsonwebtoken`/`crypto` used to
+ * verify sessions — attempting to verify here always fails.
  */
 export function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl;
-
-  // Allow /admin/login without session
-  if (pathname === '/admin/login') {
-    return NextResponse.next();
-  }
-
-  // Don't protect public routes
-  if (!pathname.startsWith('/admin')) {
-    return NextResponse.next();
-  }
-
-  // Check session for all other /admin routes
-  const sessionToken = request.cookies.get('admin_session')?.value;
-
-  if (!sessionToken) {
-    return NextResponse.redirect(new URL('/admin/login', request.url));
-  }
-
-  const session = verifySession(sessionToken);
-  if (!session) {
-    const response = NextResponse.redirect(new URL('/admin/login', request.url));
-    response.cookies.delete('admin_session');
-    return response;
-  }
-
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: [
-    '/admin/:path*',
-    '/((?!api|_next/static|_next/image|favicon.ico).*)',
-  ],
+  matcher: ['/admin/:path*'],
 };

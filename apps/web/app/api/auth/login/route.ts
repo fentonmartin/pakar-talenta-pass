@@ -3,13 +3,23 @@ import { type NextRequest, NextResponse } from 'next/server';
 
 /**
  * POST /api/auth/login — Admin login with password + optional TOTP.
- * Body: { password: string, totpCode?: string }
- * Returns: { token: string } on success
+ * Accepts JSON or form-encoded bodies. Returns: { token: string } on success
  */
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
-    const { password, totpCode } = body;
+    const contentType = request.headers.get('content-type') ?? '';
+    let password: string | undefined;
+    let totpCode: string | undefined;
+
+    if (contentType.includes('application/json')) {
+      const body = await request.json();
+      password = body.password;
+      totpCode = body.totpCode;
+    } else {
+      const form = await request.formData();
+      password = form.get('password')?.toString();
+      totpCode = form.get('totpCode')?.toString();
+    }
 
     if (!password || typeof password !== 'string') {
       return NextResponse.json({ error: 'Password is required' }, { status: 400 });
@@ -18,7 +28,14 @@ export async function POST(request: NextRequest) {
     // The auth package checks both password and TOTP (if configured)
     const token = await authenticateAdmin(password, totpCode);
 
+    // Plain HTML form posts (the login page) expect redirects, not JSON.
+    const isFormPost = contentType.includes('application/x-www-form-urlencoded') || contentType.includes('multipart/form-data');
+
     if (!token) {
+      if (isFormPost) {
+        const response = NextResponse.redirect(new URL('/admin/login?error=invalid', request.url), 303);
+        return response;
+      }
       return NextResponse.json(
         { error: 'Invalid credentials' },
         { status: 401 }
@@ -26,7 +43,9 @@ export async function POST(request: NextRequest) {
     }
 
     // Set HttpOnly cookie for the admin session
-    const response = NextResponse.json({ token });
+    const response = isFormPost
+      ? NextResponse.redirect(new URL('/admin', request.url), 303)
+      : NextResponse.json({ token });
     response.cookies.set('admin_session', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
@@ -43,7 +62,7 @@ export async function POST(request: NextRequest) {
 }
 
 /**
- * POST /api/auth/logout — Clear admin session.
+ * DELETE /api/auth/logout — Clear admin session.
  */
 export async function DELETE(_request: NextRequest) {
   const response = NextResponse.json({ success: true });

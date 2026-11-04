@@ -4,6 +4,7 @@
  */
 
 import { parseChat, normalizeSender, isQuestion, hasWarmthSignal, isInitiative, isAvoidant, lengthCategory } from './parser';
+import { interestSignalsPrompt, effortConsistencyPrompt, mixedSignalsPrompt, nextQuestionPrompt } from './prompts';
 import { InterestSignals, EffortConsistency, MixedSignals, NextQuestion, BrandonReport, ChatAnalysisInput } from './types';
 
 const OPENROUTER_API_URL = 'https://openrouter.ai/api/v1/chat/completions';
@@ -75,21 +76,21 @@ export async function analyzeChat(
   // 3. Run each analysis via OpenRouter
 
   // --- Interest Signals ---
-  const interestSystem = `You are an relationship dynamics analyst. Return ONLY valid JSON as specified. Do not include any reasoning, introduction, or conclusion beyond the JSON object.`;
+  const interestSystem = `You are a relationship dynamics analyst. Return ONLY valid JSON as specified. Do not include any reasoning, introduction, or conclusion beyond the JSON object.`;
   const interestPrompt = interestSignalsPrompt(formattedMessages);
   const interestResp = await callOpenRouter(interestSystem, interestPrompt, 0.2);
   const interestContent = extractContent(interestResp);
   const interestData = JSON.parse(interestContent);
 
   // --- Effort and Consistency ---
-  const effortSystem = `You are an relationship dynamics analyst. Return ONLY valid JSON as specified. Do not include any reasoning, introduction, or conclusion beyond the JSON object.`;
+  const effortSystem = `You are a relationship dynamics analyst. Return ONLY valid JSON as specified. Do not include any reasoning, introduction, or conclusion beyond the JSON object.`;
   const effortPrompt = effortConsistencyPrompt(formattedMessages);
   const effortResp = await callOpenRouter(effortSystem, effortPrompt, 0.2);
   const effortContent = extractContent(effortResp);
   const effortData = JSON.parse(effortContent);
 
   // --- Mixed Signals ---
-  const mixedSystem = `You are an relationship dynamics analyst. Return ONLY valid JSON as specified. Do not include any reasoning, introduction, or conclusion beyond the JSON object.`;
+  const mixedSystem = `You are a relationship dynamics analyst. Return ONLY valid JSON as specified. Do not include any reasoning, introduction, or conclusion beyond the JSON object.`;
   const mixedPrompt = mixedSignalsPrompt(formattedMessages);
   const mixedResp = await callOpenRouter(mixedSystem, mixedPrompt, 0.2);
   const mixedContent = extractContent(mixedResp);

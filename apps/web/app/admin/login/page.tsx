@@ -1,65 +1,70 @@
 import Link from 'next/link';
+import { BrandLogo } from '@/app/components/BrandLogo';
 
 /**
  * Admin login page — password + TOTP 2FA form.
  * No session required — this is the entry point to the admin console.
  */
-export default function AdminLoginPage() {
+export default async function AdminLoginPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ error?: string }>;
+}) {
+  const params = await searchParams;
+  const hasError = params.error === 'invalid';
+
   return (
-    <div className="min-h-screen bg-surface-50 flex items-center justify-center p-6">
+    <div className="flex min-h-screen items-center justify-center bg-white p-6">
       <div className="w-full max-w-md">
-        <div className="text-center mb-8">
-          <div className="text-xs font-mono text-gold/60 uppercase tracking-[0.3em] mb-2">
-            Pakar Talenta Pass
+        <div className="mb-8 text-center">
+          <div className="flex justify-center">
+            <BrandLogo height={46} />
           </div>
-          <h1 className="text-2xl font-bold text-white">Admin Login</h1>
-          <p className="text-surface-400 text-sm mt-2">
-            Enter your credentials and TOTP code
-          </p>
+          <h1 className="mt-6 text-2xl font-bold text-[#002060]">Admin Login</h1>
+          <p className="mt-2 text-sm text-slate-500">Enter your credentials and TOTP code</p>
         </div>
+
+        {hasError && (
+          <p className="mb-4 text-center text-sm text-red-500">
+            Invalid credentials. Check your password and TOTP code.
+          </p>
+        )}
 
         <form method="POST" action="/api/auth/login" className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-surface-300 mb-1">
-              Password
-            </label>
+            <label className="mb-1 block text-sm font-medium text-slate-700">Password</label>
             <input
               type="password"
               name="password"
               required
-              className="w-full px-4 py-3 bg-surface-100/10 border border-gold/20 rounded-xl text-white placeholder-surface-500 focus:outline-none focus:border-gold/50 transition-colors"
               autoComplete="current-password"
+              className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 placeholder-slate-400 focus:border-[#7a2fff] focus:outline-none focus:ring-2 focus:ring-[#7a2fff]/20"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-surface-300 mb-1">
-              TOTP Code (6-digit)
-            </label>
+            <label className="mb-1 block text-sm font-medium text-slate-700">TOTP Code (6-digit)</label>
             <input
               type="text"
               name="totpCode"
               required
               maxLength={6}
               pattern="\d{6}"
-              className="w-full px-4 py-3 bg-surface-100/10 border border-gold/20 rounded-xl text-white font-mono placeholder-surface-500 focus:outline-none focus:border-gold/50 transition-colors"
               autoComplete="one-time-password"
+              className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 font-mono text-slate-900 placeholder-slate-400 focus:border-[#7a2fff] focus:outline-none focus:ring-2 focus:ring-[#7a2fff]/20"
             />
           </div>
 
           <button
             type="submit"
-            className="w-full gold-bg text-surface-50 py-3 rounded-xl font-bold hover:opacity-90 transition-opacity"
+            className="gold-bg w-full rounded-xl py-3 font-bold text-white shadow-lg shadow-red-950/30 transition hover:opacity-90"
           >
             Sign In
           </button>
         </form>
 
-        <div className="text-center mt-6">
-          <Link
-            href="/"
-            className="text-sm text-surface-400 hover:text-gold transition-colors"
-          >
+        <div className="mt-6 text-center">
+          <Link href="/" className="text-sm text-slate-500 transition hover:text-[#7a2fff]">
             ← Back to public site
           </Link>
         </div>

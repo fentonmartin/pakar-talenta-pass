@@ -1,13 +1,12 @@
-import { getDb } from '@/app/lib/db';
 import {
   detectDeliveryMethod,
-  generatePassportData,
+  normalizeEmail,
+  normalizePhone,
   generateWaLink,
 } from '@pakar-talenta/core';
 import { sendInvitationEmail } from '@pakar-talenta/mail';
 import { type NextRequest, NextResponse } from 'next/server';
-import { desc } from 'drizzle-orm';
-import { passportPasses } from '@pakar-talenta/db';
+import { createPassport, listPassports, isDemoMode } from '@/app/lib/demo-store';
 
 /**
  * POST /api/passes — Create a new passport pass.
@@ -22,48 +21,43 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'fullName is required' }, { status: 400 });
     }
 
-    const validEmail = email && isValidEmail(email) ? email : undefined;
-    const validPhone = phone && isValidPhone(phone) ? phone : undefined;
+    const validEmail = email && isValidEmail(email) ? normalizeEmail(email) : undefined;
+    const validPhone = phone && isValidPhone(phone) ? normalizePhone(phone) : undefined;
 
     if (!validEmail && !validPhone) {
       return NextResponse.json(
         { error: 'At least one valid contact method (email or phone) is required' },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
-    const db = getDb();
-    const passportData = generatePassportData({
+    const passport = await createPassport({
       fullName,
       email: validEmail,
       phone: validPhone,
       validityDays,
     });
 
-    const [passport] = await db.insert(passportPasses).values(passportData).returning();
-
-    // Detect delivery method and queue delivery
+    // Detect delivery method and simulate delivery in real mode only.
     const decision = detectDeliveryMethod(passport.email, passport.phone);
 
-    // In a real app, this would enqueue to the worker
-    // For now, simulate immediate delivery
-    if (decision.deliverable && decision.channels.includes('email')) {
+    if (!isDemoMode() && decision.deliverable && decision.channels.includes('email')) {
       const verifyUrl = `${process.env.BASE_URL}/verify?email=${encodeURIComponent(passport.email!)}&code=${passport.uniqueCode}`;
       let waLink: string | null = null;
       if (decision.channels.includes('whatsapp')) {
         waLink = generateWaLink(
           decision.recipients.whatsapp!,
-          `Hi ${passport.fullName}, your Pakar Talenta Pass ${passport.uniqueCode} is ready. Verify at: ${verifyUrl}`
+          `Hi ${passport.fullName}, your Pakar Talenta Pass ${passport.uniqueCode} is ready. Verify at: ${verifyUrl}`,
         );
       }
-
       await sendInvitationEmail(passport, decision, verifyUrl, waLink);
     }
 
     return NextResponse.json({ passport }, { status: 201 });
   } catch (err) {
     console.error('Failed to create passport:', err);
-    return NextResponse.json({ error: 'Failed to create passport' }, { status: 500 });
+    const message = err instanceof Error ? err.message : 'Failed to create passport';
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
 
@@ -72,8 +66,7 @@ export async function POST(request: NextRequest) {
  */
 export async function GET() {
   try {
-    const db = getDb();
-    const passes = await db.select().from(passportPasses).orderBy(desc(passportPasses.createdAt));
+    const passes = await listPassports();
     return NextResponse.json({ passes });
   } catch (err) {
     console.error('Failed to list passes:', err);

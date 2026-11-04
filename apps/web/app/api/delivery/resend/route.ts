@@ -1,8 +1,6 @@
-import { getDb } from '@/app/lib/db';
-import { passportPasses } from '@pakar-talenta/db';
-import { eq } from 'drizzle-orm';
 import { type NextRequest, NextResponse } from 'next/server';
 import { detectDeliveryMethod, generateWaLink, generateMailtoLink } from '@pakar-talenta/core';
+import { getPassport } from '@/app/lib/demo-store';
 
 /**
  * POST /api/delivery/resend — Re-trigger delivery for a passport.
@@ -18,12 +16,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'passportId is required' }, { status: 400 });
     }
 
-    const db = getDb();
-    const [passport] = await db
-      .select()
-      .from(passportPasses)
-      .where(eq(passportPasses.id, passportId))
-      .limit(1);
+    const passport = await getPassport(passportId);
 
     if (!passport) {
       return NextResponse.json({ error: 'Passport not found' }, { status: 404 });
@@ -34,7 +27,7 @@ export async function POST(request: NextRequest) {
     if (!decision.deliverable) {
       return NextResponse.json(
         { passport, decision, error: 'No valid contact method for delivery' },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -46,7 +39,7 @@ export async function POST(request: NextRequest) {
     if (decision.channels.includes('whatsapp')) {
       waLink = generateWaLink(
         decision.recipients.whatsapp!,
-        `Hi ${passport.fullName}, your Pakar Talenta Pass ${passport.uniqueCode} is ready. Verify at: ${verifyUrl}`
+        `Hi ${passport.fullName}, your Pakar Talenta Pass ${passport.uniqueCode} is ready. Verify at: ${verifyUrl}`,
       );
     }
 
@@ -54,7 +47,7 @@ export async function POST(request: NextRequest) {
       mailtoLink = generateMailtoLink(
         decision.recipients.email!,
         `Your Pakar Talenta Pass — ${passport.uniqueCode}`,
-        `Hi ${passport.fullName},\n\nYour Pakar Talenta Pass is ready.\nUnique Code: ${passport.uniqueCode}\nExpiry: ${new Date(passport.expiryDate).toDateString()}\n\nVerify at: ${verifyUrl}`
+        `Hi ${passport.fullName},\n\nYour Pakar Talenta Pass is ready.\nUnique Code: ${passport.uniqueCode}\nExpiry: ${new Date(passport.expiryDate).toLocaleDateString('id-ID')}\n\nVerify at: ${verifyUrl}`,
       );
     }
 

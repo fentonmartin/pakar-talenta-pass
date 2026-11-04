@@ -1,5 +1,14 @@
 import type { Metadata } from 'next';
+import { Host_Grotesk } from 'next/font/google';
 import './globals.css';
+
+// Pakar Talenta brand font — Host Grotesk (as used on pakartalenta.co.id)
+const hostGrotesk = Host_Grotesk({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600', '700', '800'],
+  variable: '--font-host-grotesk',
+  display: 'swap',
+});
 
 export const metadata: Metadata = {
   title: {
@@ -23,7 +32,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="antialiased bg-surface-50 text-surface-100 min-h-screen">
+      <body className={`${hostGrotesk.variable} antialiased bg-white text-slate-900 min-h-screen`}>
         {children}
       </body>
     </html>

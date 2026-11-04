@@ -1,7 +1,5 @@
-import { getDb } from '@/app/lib/db';
-import { passportPasses } from '@pakar-talenta/db';
-import { eq } from 'drizzle-orm';
 import { type NextRequest, NextResponse } from 'next/server';
+import { updatePassportStatus } from '@/app/lib/demo-store';
 
 /**
  * POST /api/passes/[id]/revoke — Revoke a passport pass.
@@ -9,22 +7,14 @@ import { type NextRequest, NextResponse } from 'next/server';
  */
 export async function POST(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
     const { id } = await params;
-    const db = getDb();
-
-    const [revoked] = await db
-      .update(passportPasses)
-      .set({ status: 'revoked' })
-      .where(eq(passportPasses.id, id))
-      .returning();
-
+    const revoked = await updatePassportStatus(id, 'revoked');
     if (!revoked) {
       return NextResponse.json({ error: 'Passport not found' }, { status: 404 });
     }
-
     return NextResponse.json({ passport: revoked });
   } catch (err) {
     console.error('Revocation failed:', err);
