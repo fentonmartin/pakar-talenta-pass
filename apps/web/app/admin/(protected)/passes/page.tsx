@@ -31,12 +31,20 @@ export default async function PassesPage({ searchParams }: PassesPageProps) {
     <div>
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold text-[#002060]">Passes</h1>
-        <Link
-          href="/admin/passes/new"
-          className="gold-bg px-4 py-2 rounded-xl font-medium text-white hover:opacity-90 transition-opacity"
-        >
-          + New Pass
-        </Link>
+        <div className="flex items-center gap-2">
+          <Link
+            href="/admin/passes/import"
+            className="rounded-xl border border-slate-300 px-4 py-2 text-sm font-medium text-slate-600 transition hover:border-[#7a2fff] hover:text-[#7a2fff]"
+          >
+            Bulk Import
+          </Link>
+          <Link
+            href="/admin/passes/new"
+            className="gold-bg px-4 py-2 rounded-xl font-medium text-white hover:opacity-90 transition-opacity"
+          >
+            + New Pass
+          </Link>
+        </div>
       </div>
 
       {/* Search + filters */}
